@@ -47,9 +47,10 @@ def gpt35t_completion(prompt, model='gpt-4', temp=0.4, top_p=1.0, max_tokens=100
             stop=stop)
     except openai.error.InvalidRequestError:
         # Most likely token limit exceeded.
+        # If only couple of messages in convo, return
         if len(prompt) < 3:
-            # TODO: Cut some logs off if they exceed 4000 tokens.
             return text, tokens_total
+        # Remove older half of the convo from memory
         for item in range(int(len(prompt)/2)):
             prompt.pop(2)
         text, tokens_total = gpt35t_completion(prompt)

@@ -1,7 +1,7 @@
 ## How to use TerminalGPT?
 #### **Step 1**
 Add a .txt file named 'openaiapikey.txt' into the same folder as TerminalGPT.py.
-### **Step 2**
+#### **Step 2**
 Copy-Paste your OpenAI API key and nothing else into the "openaiapikey.txt" -file.
 #### **Step 3**
 Specify the GPT model you wish to use in 'TerminalGPT.py' file on line 69 (`GPT_MODEL` variable). Available models can be found from OpenAI's documentation.

@@ -8,4 +8,4 @@ Specify the GPT model you wish to use in 'TerminalGPT.py' file on line 69 (GPT_M
 ### Step 4
 For GPT models from 3.5 onwards, change the system message the model receives in 'TerminalGPT.py' file on line 72 (conversation variable) to guide behaviour of the GPT model.
 ### Step 5
-Run the python file on the command line via command: python TerminalGPT.py 
+Run the python file on the command line via command 'python TerminalGPT.py' and start chatting. 

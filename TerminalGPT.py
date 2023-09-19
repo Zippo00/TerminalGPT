@@ -16,7 +16,10 @@ def open_file(filepath):
     '''
     with open(filepath, 'r', encoding='utf-8') as infile:
         return infile.read()
-    
+
+# OpenAI API key
+openai.api_key = open_file('openaiapikey.txt')
+
 def gpt35t_completion(prompt, model='gpt-4', temp=0.4, top_p=1.0, max_tokens=1000, freq_pen=0.7, pres_pen=0.0, stop=['"role": "assistant", "content": " "', 'user:', 'User:', 'USER:']):
     '''
     Get a completion from OpenAI's GPT LLM to a prompt.
@@ -47,6 +50,8 @@ def gpt35t_completion(prompt, model='gpt-4', temp=0.4, top_p=1.0, max_tokens=100
             stop=stop)
     except openai.error.InvalidRequestError:
         # Most likely token limit exceeded.
+        traceback.print_exc()
+        return "Exception occured", 0
         # If only couple of messages in convo, return
         if len(prompt) < 3:
             return text, tokens_total
@@ -63,11 +68,11 @@ def gpt35t_completion(prompt, model='gpt-4', temp=0.4, top_p=1.0, max_tokens=100
     return text, tokens_total
 
 if __name__ == '__main__':
-    # OpenAI API key
-    openai.api_key = open_file('openaiapikey.txt')
+    # GPT Model you wish to use
+    GPT_MODEL = 'gpt-4'
     tokens = 0
     # Type your system message here to guide the GPT model's behaviour
-    conversation = [{"role": "system", "content" : "You are a university research assistant. Your main objective is to help the user write as sophisticated text for research papers as possible."}]
+    conversation = [{"role": "system", "content" : "You are a university research assistant. Your main objective is to help the user write as sophisticated text as possible."}]
     while True:
         # If token amount in the conversation starts to near max, remove older half of the conversation from the AI's memory.
         if tokens > 3000:
@@ -82,12 +87,14 @@ if __name__ == '__main__':
         conversation[-1] = ast.literal_eval(conversation[-1].replace('\r','\\r').replace('\n','\\n'))
         # Get response from AI
         #print(f"\n\nConverstaion: {conversation}\n\n")
-        response, tokens = gpt35t_completion(conversation)
+        response, tokens = gpt35t_completion(conversation, model=GPT_MODEL)
         #print(f"Response: {response}\nTokens: {tokens}")
         if response == "Exception occured":
             print("Something went wrong. Please try again later.")
             exit()
+        print('\n')
         print('Pinocchio:', response)
+        print('\n')
         # Append the AI's response into convo.
         conversation[-1] = '''{''' + f''''role': 'assistant', 'content': '{response.replace("'", '"')}' ''' + '}'
         conversation[-1] = ast.literal_eval(conversation[-1].replace('\r','\\r').replace('\n','\\n'))
